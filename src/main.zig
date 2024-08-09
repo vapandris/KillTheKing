@@ -1,4 +1,4 @@
-// raylib-zig (c) Nikolas Wipper 2023
+const std = @import("std");
 
 const rl = @import("raylib");
 
@@ -31,4 +31,12 @@ pub fn main() anyerror!void {
         rl.drawText("Congrats! You created your first window!", 190, 200, 20, rl.Color.light_gray);
         //----------------------------------------------------------------------------------
     }
+}
+
+// ==========================================================================
+test main {
+    _ = @import("Base/math.zig");
+    _ = @import("Base/shapes.zig");
+    _ = @import("Base/screen.zig");
+    _ = @import("Base/atlas.zig");
 }
