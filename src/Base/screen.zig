@@ -109,6 +109,16 @@ pub const Camera = struct {
     }
 };
 
+pub fn drawTextureEx(screenRect: rl.Rectangle, texture: rl.Texture2D, scale: f32) void {
+    rl.drawTextureEx(
+        texture,
+        .{ .x = screenRect.x, .y = screenRect.y },
+        0,
+        scale,
+        rl.Color.white,
+    );
+}
+
 // ==========================================================================
 const testing = @import("std").testing;
 const FLOAT_TOLERANCE = 0.001;
