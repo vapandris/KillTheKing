@@ -21,8 +21,8 @@ pub const Camera = struct {
         const midleOfCamera = self.rect.getMidPoint();
         const dir = midleOfCamera.getVectorTo(pos);
 
-        self.rect.pos.x += dir.x;
-        self.rect.pos.y += dir.y;
+        self.*.rect.pos.x += dir.x;
+        self.*.rect.pos.y += dir.y;
     }
 
     /// Start moving toward a given position (trying to gradually center on it)
@@ -109,12 +109,13 @@ pub const Camera = struct {
     }
 };
 
-pub fn drawTextureEx(screenRect: rl.Rectangle, texture: rl.Texture2D, scale: f32) void {
-    rl.drawTextureEx(
+pub fn drawTexture(screenRect: rl.Rectangle, texture: rl.Texture2D) void {
+    rl.drawTexturePro(
         texture,
-        .{ .x = screenRect.x, .y = screenRect.y },
+        .{ .x = 0, .y = 0, .width = 48, .height = 48 },
+        screenRect,
+        .{ .x = 0, .y = 0 },
         0,
-        scale,
         rl.Color.white,
     );
 }

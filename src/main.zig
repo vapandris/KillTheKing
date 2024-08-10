@@ -15,6 +15,13 @@ const Board = struct {
     pub const width: f32 = @floatFromInt(cols * tileSize);
     pub const height: f32 = @floatFromInt(rows * tileSize);
 
+    pub fn rect(self: Board) shapes.Rect {
+        return .{
+            .pos = self.pos,
+            .size = .{ .w = Board.width, .h = Board.height },
+        };
+    }
+
     pub fn draw(self: Board, camera: screen.Camera) void {
         // TODO: Move Texture load from here almost literairly to anywhere else
         const lightText = rl.loadTexture("assets/tile_light.png");
@@ -35,9 +42,9 @@ const Board = struct {
 
                 const parity = ((col + (row % 2)) % 2);
                 if (parity == 0) {
-                    screen.drawTextureEx(screenRect, lightText, 1);
+                    screen.drawTexture(screenRect, lightText);
                 } else {
-                    screen.drawTextureEx(screenRect, darkText, 1);
+                    screen.drawTexture(screenRect, darkText);
                 }
 
                 tile.pos.x += @floatFromInt(tileSize);
@@ -50,23 +57,26 @@ const Board = struct {
 pub fn main() anyerror!void {
     // Initialization
     //--------------------------------------------------------------------------------------
-    const screenWidth = 800;
-    const screenHeight = 450;
+    const screenWidth = 1600;
+    const screenHeight = 900;
 
     rl.initWindow(screenWidth, screenHeight, "raylib-zig [core] example - basic window");
     defer rl.closeWindow(); // Close window and OpenGL context
 
     rl.setTargetFPS(60); // Set our game to run at 60 frames-per-second
 
-    const screenSize = screen.getScreenSize();
-    const camera: screen.Camera = .{
-        .rect = .{
-            .pos = .{ .x = 0, .y = 0 },
-            .size = screenSize,
-        },
-    };
     const board: Board = .{};
 
+    const h = Board.height + 32;
+    const w = screenWidth * (h / screenHeight);
+    std.debug.print("{d} x {d}\n", .{ w, h });
+    var camera: screen.Camera = .{
+        .rect = .{
+            .pos = .{ .x = board.pos.x, .y = board.pos.x },
+            .size = .{ .w = w, .h = h },
+        },
+    };
+    camera.focusOn(board.rect().getMidPoint());
     // Main game loop
     while (!rl.windowShouldClose()) { // Detect window close button or ESC key
         // Update
@@ -79,7 +89,7 @@ pub fn main() anyerror!void {
         rl.beginDrawing();
         defer rl.endDrawing();
 
-        rl.clearBackground(rl.Color.white);
+        rl.clearBackground(rl.Color.dark_gray);
 
         board.draw(camera);
         //----------------------------------------------------------------------------------
