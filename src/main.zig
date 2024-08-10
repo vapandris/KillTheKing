@@ -4,55 +4,9 @@ const rl = @import("raylib");
 const math = @import("Base/math.zig");
 const shapes = @import("Base/shapes.zig");
 const screen = @import("Base/screen.zig");
+const res = @import("resources.zig");
 
-const Board = struct {
-    pos: math.Pos2 = .{ .x = 0, .y = 0 },
-
-    pub const tileSize: u32 = 48;
-    pub const cols: u32 = 8;
-    pub const rows: u32 = 8;
-
-    pub const width: f32 = @floatFromInt(cols * tileSize);
-    pub const height: f32 = @floatFromInt(rows * tileSize);
-
-    pub fn rect(self: Board) shapes.Rect {
-        return .{
-            .pos = self.pos,
-            .size = .{ .w = Board.width, .h = Board.height },
-        };
-    }
-
-    pub fn draw(self: Board, camera: screen.Camera) void {
-        // TODO: Move Texture load from here almost literairly to anywhere else
-        const lightText = rl.loadTexture("assets/tile_light.png");
-        const darkText = rl.loadTexture("assets/tile_dark.png");
-
-        if (lightText.id <= 0) unreachable;
-        if (darkText.id <= 0) unreachable;
-
-        var tile: shapes.Rect = .{
-            .pos = self.pos,
-            .size = .{ .w = @floatFromInt(tileSize), .h = @floatFromInt(tileSize) },
-        };
-
-        for (0..Board.rows) |row| {
-            tile.pos.x = self.pos.x;
-            for (0..Board.cols) |col| {
-                const screenRect = camera.ScreenRectFromRect(tile, screen.getScreenSize());
-
-                const parity = ((col + (row % 2)) % 2);
-                if (parity == 0) {
-                    screen.drawTexture(screenRect, lightText);
-                } else {
-                    screen.drawTexture(screenRect, darkText);
-                }
-
-                tile.pos.x += @floatFromInt(tileSize);
-            }
-            tile.pos.y += @floatFromInt(tileSize);
-        }
-    }
-};
+const Board = @import("board.zig").Board;
 
 pub fn main() anyerror!void {
     // Initialization
@@ -64,6 +18,8 @@ pub fn main() anyerror!void {
     defer rl.closeWindow(); // Close window and OpenGL context
 
     rl.setTargetFPS(60); // Set our game to run at 60 frames-per-second
+
+    res.init();
 
     const board: Board = .{};
 
@@ -89,7 +45,7 @@ pub fn main() anyerror!void {
         rl.beginDrawing();
         defer rl.endDrawing();
 
-        rl.clearBackground(rl.Color.dark_gray);
+        rl.clearBackground(rl.Color.init(20, 20, 25, 255));
 
         board.draw(camera);
         //----------------------------------------------------------------------------------
