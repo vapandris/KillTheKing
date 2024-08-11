@@ -7,7 +7,7 @@ const res = @import("resources.zig");
 
 pub const Dummy = struct {
     body: shapes.Circle,
-    maxSpeed: f32 = 3,
+    maxSpeed: f32 = 1.5,
     acceleration: f32 = 0.5,
     moveDirection: math.Vec2 = .{ .x = 0, .y = 0 },
 
@@ -29,10 +29,11 @@ pub const Dummy = struct {
     pub fn draw(self: Dummy, camera: screen.Camera) void {
         const dummyTextr = res.dummyTextr;
         var rect: shapes.Rect = .{ .pos = undefined, .size = .{
-            .w = self.body.r * 2,
-            .h = self.body.r * 2,
+            .w = 16,
+            .h = 24,
         } };
         rect.setMidPoint(self.body.pos);
+        rect.pos.y -= 5;
 
         const screenRect = camera.ScreenRectFromRect(rect, screen.getScreenSize());
 
@@ -40,6 +41,17 @@ pub const Dummy = struct {
             screenRect,
             .{ .x = 0, .y = 0, .width = 16, .height = 24 },
             dummyTextr,
+        );
+    }
+
+    pub fn debugDraw(self: Dummy, camera: screen.Camera) void {
+        const screenCircle = camera.ScreenCircleFromCircle(self.body, screen.getScreenSize());
+
+        rl.drawCircle(
+            screenCircle.x,
+            screenCircle.y,
+            screenCircle.r,
+            rl.Color.init(0, 0, 0, 255 / 2),
         );
     }
 };

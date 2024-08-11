@@ -28,7 +28,7 @@ pub fn main() anyerror!void {
         .x = board.rect().getMidPoint().x,
         .y = board.pos.y + Board.height - 16,
     };
-    dummy.body.r = 16;
+    dummy.body.r = 5;
 
     const h = Board.height + 32;
     const w = screenWidth * (h / screenHeight);
@@ -60,6 +60,7 @@ pub fn main() anyerror!void {
 
         board.draw(camera);
         dummy.draw(camera);
+        dummy.debugDraw(camera);
         //----------------------------------------------------------------------------------
     }
 }
