@@ -109,10 +109,10 @@ pub const Camera = struct {
     }
 };
 
-pub fn drawTexture(screenRect: rl.Rectangle, texture: rl.Texture2D) void {
+pub fn drawTexture(screenRect: rl.Rectangle, source: rl.Rectangle, texture: rl.Texture2D) void {
     rl.drawTexturePro(
         texture,
-        .{ .x = 0, .y = 0, .width = 48, .height = 48 },
+        source,
         screenRect,
         .{ .x = 0, .y = 0 },
         0,

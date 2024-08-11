@@ -38,9 +38,17 @@ pub const Board = struct {
 
                 const parity = ((col + (row % 2)) % 2);
                 if (parity == 0) {
-                    screen.drawTexture(screenRect, lightText);
+                    screen.drawTexture(
+                        screenRect,
+                        .{ .x = 0, .y = 0, .width = 48, .height = 48 },
+                        lightText,
+                    );
                 } else {
-                    screen.drawTexture(screenRect, darkText);
+                    screen.drawTexture(
+                        screenRect,
+                        .{ .x = 0, .y = 0, .width = 48, .height = 48 },
+                        darkText,
+                    );
                 }
 
                 tile.pos.x += @floatFromInt(tileSize);
