@@ -64,7 +64,7 @@ pub const Circle = struct {
     /// - direction is suggested to be normal vector
     /// - acceleration is the speed of how much the circle moved in the given direction
     /// - deceleration is the speed of how much the circle moves against the given direction
-    pub fn move(self: *Circle, direction: Vec2, acceleration: f32, deceleration: f32, maxSpeed: ?f32, frameDelta: f32) MovementError!void {
+    pub fn move(self: *Circle, direction: Vec2, acceleration: f32, deceleration: f32, maxSpeed: ?f32, bounds: ?Rect, frameDelta: f32) MovementError!void {
         if (acceleration < deceleration) return MovementError.DecelerationIsGreaterThanAcceleration;
 
         // A vector pointing to the opposite direction of velocity:
@@ -83,6 +83,19 @@ pub const Circle = struct {
 
         self.pos.x += self.vel.x;
         self.pos.y += self.vel.y;
+
+        if (bounds) |rect| {
+            if ((self.pos.x - self.r) < rect.pos.x or
+                (self.pos.x + self.r) > (rect.pos.x + rect.size.w))
+            {
+                self.pos.x -= self.vel.x;
+            }
+            if ((self.pos.y - self.r) < rect.pos.y or
+                (self.pos.y + self.r) > (rect.pos.y + rect.size.h))
+            {
+                self.pos.y -= self.vel.y;
+            }
+        }
 
         if (speed < 0.5) {
             self.vel = .{ .x = 0, .y = 0 };

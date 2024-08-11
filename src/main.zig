@@ -24,7 +24,10 @@ pub fn main() anyerror!void {
 
     const board: Board = .{};
     var dummy: Dummy = .{ .body = undefined };
-    dummy.body.pos = .{ .x = 0, .y = 0 };
+    dummy.body.pos = .{
+        .x = board.rect().getMidPoint().x,
+        .y = board.pos.y + Board.height - 16,
+    };
     dummy.body.r = 16;
 
     const h = Board.height + 32;
@@ -46,7 +49,7 @@ pub fn main() anyerror!void {
         if (rl.isKeyDown(.key_w)) dir.y -= 1;
 
         dummy.moveDirection = dir;
-        dummy.update(rl.getFrameTime());
+        dummy.update(board.rect(), rl.getFrameTime());
 
         // Draw
         //----------------------------------------------------------------------------------

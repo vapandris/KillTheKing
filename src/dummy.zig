@@ -11,7 +11,7 @@ pub const Dummy = struct {
     acceleration: f32 = 0.5,
     moveDirection: math.Vec2 = .{ .x = 0, .y = 0 },
 
-    pub fn update(self: *Dummy, frameDelta: f32) void {
+    pub fn update(self: *Dummy, bounds: shapes.Rect, frameDelta: f32) void {
         self.moveDirection.normalize();
         const dir = self.moveDirection;
         const FPS = 60.0;
@@ -21,6 +21,7 @@ pub const Dummy = struct {
             self.acceleration * FPS,
             (self.acceleration / 2) * FPS,
             self.maxSpeed,
+            bounds,
             frameDelta,
         ) catch unreachable;
     }
