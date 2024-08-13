@@ -22,7 +22,6 @@ pub const Board = struct {
     }
 
     pub fn draw(self: Board, camera: screen.Camera) void {
-        // TODO: Move Texture load from here almost literairly to anywhere else
         const lightText = res.lightTileTextr;
         const darkText = res.darkTileTextr;
 

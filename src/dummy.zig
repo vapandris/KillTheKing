@@ -11,6 +11,16 @@ pub const Dummy = struct {
     acceleration: f32 = 0.5,
     moveDirection: math.Vec2 = .{ .x = 0, .y = 0 },
 
+    // Render data:
+    const textureOffset: math.Vec2 = .{
+        .x = 0,
+        .y = -5,
+    };
+    const textureSize: shapes.Size = .{
+        .w = 16,
+        .h = 24,
+    };
+
     pub fn update(self: *Dummy, bounds: shapes.Rect, frameDelta: f32) void {
         self.moveDirection.normalize();
         const dir = self.moveDirection;
@@ -28,18 +38,18 @@ pub const Dummy = struct {
 
     pub fn draw(self: Dummy, camera: screen.Camera) void {
         const dummyTextr = res.dummyTextr;
-        var rect: shapes.Rect = .{ .pos = undefined, .size = .{
-            .w = 16,
-            .h = 24,
-        } };
+        var rect: shapes.Rect = .{
+            .pos = undefined,
+            .size = textureSize,
+        };
         rect.setMidPoint(self.body.pos);
-        rect.pos.y -= 5;
+        rect.pos.y += textureOffset.y;
 
         const screenRect = camera.ScreenRectFromRect(rect, screen.getScreenSize());
 
         screen.drawTexture(
             screenRect,
-            .{ .x = 0, .y = 0, .width = 16, .height = 24 },
+            .{ .x = 0, .y = 0, .width = textureSize.w, .height = textureSize.h },
             dummyTextr,
         );
     }
