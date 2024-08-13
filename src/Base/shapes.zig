@@ -85,15 +85,17 @@ pub const Circle = struct {
         self.pos.y += self.vel.y;
 
         if (bounds) |rect| {
-            if ((self.pos.x - self.r) < rect.pos.x or
-                (self.pos.x + self.r) > (rect.pos.x + rect.size.w))
-            {
-                self.pos.x -= self.vel.x;
+            const EPS = 0.001;
+            if ((self.pos.x - self.r) < rect.pos.x) {
+                self.pos.x = (rect.pos.x + self.r) + EPS;
+            } else if ((self.pos.x + self.r) > (rect.pos.x + rect.size.w)) {
+                self.pos.x = ((rect.pos.x + rect.size.w) - self.r) - EPS;
             }
-            if ((self.pos.y - self.r) < rect.pos.y or
-                (self.pos.y + self.r) > (rect.pos.y + rect.size.h))
-            {
-                self.pos.y -= self.vel.y;
+
+            if ((self.pos.y - self.r) < rect.pos.y) {
+                self.pos.y = (rect.pos.y + self.r) + EPS;
+            } else if ((self.pos.y + self.r) > (rect.pos.y + rect.size.h)) {
+                self.pos.y = ((rect.pos.y + rect.size.h) - self.r) - EPS;
             }
         }
 
