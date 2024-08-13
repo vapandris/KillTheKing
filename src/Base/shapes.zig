@@ -88,14 +88,18 @@ pub const Circle = struct {
             const EPS = 0.001;
             if ((self.pos.x - self.r) < rect.pos.x) {
                 self.pos.x = (rect.pos.x + self.r) + EPS;
+                self.vel.x *= -0.8;
             } else if ((self.pos.x + self.r) > (rect.pos.x + rect.size.w)) {
                 self.pos.x = ((rect.pos.x + rect.size.w) - self.r) - EPS;
+                self.vel.x *= -0.8;
             }
 
             if ((self.pos.y - self.r) < rect.pos.y) {
                 self.pos.y = (rect.pos.y + self.r) + EPS;
+                self.vel.y *= -0.8;
             } else if ((self.pos.y + self.r) > (rect.pos.y + rect.size.h)) {
                 self.pos.y = ((rect.pos.y + rect.size.h) - self.r) - EPS;
+                self.vel.y *= -0.8;
             }
         }
 
